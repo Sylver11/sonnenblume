@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "sonnenblume"
+version = "0.1.0"
+description = "This is the API for the FarmFood app"
+authors = ["Sylver11 <connectmaeuse@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.66.1"
+uvicorn = "^0.14.0"
+python-dotenv = "^0.18.0"
+SQLAlchemy = "^1.4.21"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+start = "sonnenblume:main"
