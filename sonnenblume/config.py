@@ -1,5 +1,5 @@
 from pydantic import BaseSettings
-
+import dotenv
 
 class Settings(BaseSettings):
     app_name: str = "Awesome API"
