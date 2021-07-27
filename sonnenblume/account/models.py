@@ -1,10 +1,10 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer,String,DateTime,Text, Table, MetaData
 from sqlalchemy.orm import relationship
-from .database import Base
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import uuid as uuid_ext
-from .utils.uuid import UUID
+from sonnenblume.database import Base
+from sonnenblume.utils.uuid import UUID
 
 metadata = MetaData()
 
@@ -70,6 +70,7 @@ user_group_assoc = Table('so_user_group_assoc',
             primary_key=True),
         extend_existing=True)
 
+
 class Role(Base, DatabaseResponse):
     __tablename__ = 'so_user_role'
     __table_args__ = {'extend_existing': True}
@@ -86,6 +87,7 @@ class Role(Base, DatabaseResponse):
     updated = Column(DateTime,
             default=datetime.utcnow,
             onupdate=datetime.utcnow)
+
 
 class User(Base, DatabaseResponse):
     __tablename__ = 'so_user'
