@@ -6,7 +6,7 @@ from .account import views as account_view
 
 
 
-Base.metadata.create_all(bind=engine)
+#Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI()
@@ -14,6 +14,11 @@ app = FastAPI()
 
 app.include_router(test_view.router)
 app.include_router(account_view.router)
+
+@app.on_event("startup")
+async def startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 
 def start_with_poetry():
