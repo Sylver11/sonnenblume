@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer,String,DateTime,Text, Table, MetaData
+from sqlalchemy import Boolean, Column, ForeignKey, Integer,String,DateTime,Text, Table#, MetaData
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -6,7 +6,7 @@ import uuid as uuid_ext
 from sonnenblume.database import Base
 from sonnenblume.utils.uuid import UUID
 
-metadata = MetaData()
+#metadata = MetaData()
 
 class DatabaseResponse():
     query_status = None
@@ -43,7 +43,7 @@ class Log(Base):
 
 
 user_role_assoc = Table('so_user_role_assoc',
-        metadata,
+        Base.metadata,
         Column(
             'user_uuid',
             UUID,
@@ -57,7 +57,7 @@ user_role_assoc = Table('so_user_role_assoc',
         extend_existing=True)
 
 user_group_assoc = Table('so_user_group_assoc',
-        metadata,
+        Base.metadata,
         Column(
             'user_uuid',
             UUID,
@@ -100,10 +100,9 @@ class User(Base, DatabaseResponse):
     secondname = Column(String(255), index=True, nullable=False)
     email = Column(String(255), index=True, unique=True, nullable=False)
     password_hash = Column(String(128))
-    thirdparty_authenticated = Column(Boolean, nullable=False,
-            default=False)
+    thirdparty_authenticated = Column(Boolean, default=False)
     thirdparty_name = Column(String(255))
-    authenticated = Column(Boolean, nullable=False, default=False)
+    authenticated = Column(Boolean, default=False)
     last_login_at = Column(DateTime())
     current_login_at = Column(DateTime())
     last_login_ip = Column(String(100))
