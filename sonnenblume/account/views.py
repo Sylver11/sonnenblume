@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from uuid import UUID
 from . import models, schemas
 from .dependencies import get_user_dal
@@ -9,6 +10,13 @@ router = APIRouter(
     prefix="/account",
     responses={404: {"description": "Not found"}},
 )
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+@router.get("/testing-token/")
+async def read_items(token: str = Depends(oauth2_scheme)):
+    return {"token": token}
 
 
 @router.post("/users/", response_model=schemas.User)
