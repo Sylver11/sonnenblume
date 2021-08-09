@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from uuid import UUID
 from . import models, schemas
 from .dependencies import get_user_dal
@@ -14,9 +14,40 @@ router = APIRouter(
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+def fake_decode_token(token):
+    return User(
+        username=token + "fakedecoded", email="john@example.com", full_name="John Doe"
+    )
+
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    user = fake_decode_token(token)
+    return user
+
+@app.get("/users/me")
+async def read_users_me(current_user: User = Depends(get_current_user)):
+    return current_user
+
+
 @router.get("/testing-token/")
 async def read_items(token: str = Depends(oauth2_scheme)):
     return {"token": token}
+
+
+
+@app.post("/token")
+async def login(form_data: OAuth2PasswordRequestForm = Depends(),
+                dal_models: UserDAL = Depends(get_user_dal):
+    db_user = await dal_models.get_user_by_email(form_data.username)
+    if db_user is None:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    user = UserInDB(**user_dict)
+    if not db_user.check_password(form_data.password)
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    #need to return correct access token here 
+    return {"access_token": user.username, "token_type": "bearer"}
+
+
 
 
 @router.post("/users/", response_model=schemas.User)
